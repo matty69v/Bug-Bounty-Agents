@@ -1,0 +1,12 @@
+{
+  "ignorePatterns": [
+    { "pattern": "^https://github.com/matty69v/Bug-Bounty-Agents/security/advisories/new$" },
+    { "pattern": "^https://github.com/matty69v/Bug-Bounty-Agents/releases/tag/" },
+    { "pattern": "^https://github.com/matty69v/Bug-Bounty-Agents/compare/" }
+  ],
+  "timeout": "10s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206, 429]
+}

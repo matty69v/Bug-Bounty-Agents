@@ -1,0 +1,29 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  markdown-link-check:
+    name: Markdown link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run markdown-link-check
+        run: |
+          npx --yes markdown-link-check \
+            -c .github/markdown-link-check.json \
+            README.md AGENTS.md CHANGELOG.md SECURITY.md CONTRIBUTING.md
+
+  shellcheck:
+    name: ShellCheck install.sh
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        run: shellcheck install.sh

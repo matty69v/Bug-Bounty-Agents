@@ -1,0 +1,53 @@
+name: New agent request
+description: Propose a new agent persona for the repository.
+labels: ["new-agent"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Proposed agent name
+      description: Lowercase, hyphenated, ends with role (e.g. `cloud-security`, `binary-exploit`).
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+      description: What does this agent do that no existing agent covers?
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Engagement phase
+      options:
+        - recon
+        - intel
+        - web
+        - api
+        - infra
+        - cloud
+        - network
+        - mobile
+        - wireless
+        - exploit
+        - postex
+        - defense
+        - report
+        - meta
+    validations:
+      required: true
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk tier
+      options:
+        - safe (read-only / passive)
+        - active (touches target)
+        - intrusive (likely to alert or disrupt)
+    validations:
+      required: true
+  - type: textarea
+    id: triggers
+    attributes:
+      label: Example user requests that should route to this agent

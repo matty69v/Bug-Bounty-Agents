@@ -1,0 +1,44 @@
+name: Bug report
+description: Something in an existing agent prompt is wrong, unsafe, or unclear.
+labels: ["bug"]
+body:
+  - type: input
+    id: agent
+    attributes:
+      label: Affected agent
+      description: Filename of the agent (e.g. `web-hunter.md`).
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did the agent do, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: The user prompt(s) and the agent's output. Redact anything sensitive.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: LLM client
+      options:
+        - Claude Code
+        - GitHub Copilot Chat
+        - Cursor
+        - ChatGPT
+        - Gemini
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      description: e.g. claude-sonnet-4.7, gpt-4o, gemini-2.5-pro
