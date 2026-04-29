@@ -39,6 +39,12 @@ Each markdown file is a self-contained system prompt for a specialized role:
 | `poc-validator.md` | Verify and stabilize PoCs |
 | `report-generator.md` | Write triage-ready bug reports |
 | `swarm-orchestrator.md` | Coordinate multiple agents |
+| `graphql-hunter.md` | GraphQL schema, authz, and complexity attacks |
+| `jwt-cracker.md` | JWT/OIDC token attacks (alg confusion, kid/jku abuse, weak HMAC) |
+| `ssrf-hunter.md` | SSRF discovery, filter bypass, cloud-metadata abuse |
+| `subdomain-takeover.md` | Dangling DNS / subdomain takeover validation |
+| `llm-redteam.md` | Prompt injection, tool abuse, RAG poisoning, agent loops |
+| `container-escape.md` | Docker / Kubernetes pod-to-node-to-cluster breakout |
 | ...and more | See the file list in the repo root |
 
 ---
