@@ -1,4 +1,4 @@
-<div align="center">
+c<div align="center">
 
 # Bug-Bounty-Agents
 
@@ -47,11 +47,12 @@ LLM into a specialist, with strict scope enforcement built in.
 5. [Using an Agent](#using-an-agent)
 6. [Workflows](#workflows)
 7. [Examples](#examples)
-8. [Updating](#updating)
-9. [Project Files](#project-files)
-10. [Contributing](#contributing)
-11. [Security](#security)
-12. [Disclaimer](#disclaimer)
+8. [Burp Suite MCP Integration](#burp-suite-mcp-integration)
+9. [Updating](#updating)
+10. [Project Files](#project-files)
+11. [Contributing](#contributing)
+12. [Security](#security)
+13. [Disclaimer](#disclaimer)
 
 ---
 
@@ -291,6 +292,91 @@ End-to-end engagement walkthroughs (sanitized) live in [`examples/`](examples/):
 - [`web-bug-bounty.md`](examples/web-bug-bounty.md) — recon → web-hunter →
   bizlogic → chain → validate → report, ending in a Critical-tier
   HackerOne submission.
+
+---
+
+## Burp Suite MCP Integration
+
+[PortSwigger's MCP Server](https://github.com/PortSwigger/mcp-server) lets
+your LLM client drive Burp Suite directly — issue requests through the
+proxy, query Repeater/Intruder, read site maps, and pivot off live traffic
+while an agent in this repo provides the methodology.
+
+> **Pairing tip:** load `web-hunter`, `api-security`, `ssrf-hunter`, or
+> `bizlogic-hunter` alongside the Burp MCP so the agent can both *think*
+> like a specialist and *act* through Burp.
+
+### Prerequisites
+
+- Burp Suite (Community or Professional) installed and running
+- Java available on `PATH` (`java --version`)
+- `jar` available on `PATH` (`jar --version`) — required to build
+- An MCP-capable client (Claude Desktop, Claude Code, Cursor, etc.)
+
+### Build the extension
+
+```bash
+git clone https://github.com/PortSwigger/mcp-server.git
+cd mcp-server
+./gradlew embedProxyJar
+# output: build/libs/burp-mcp-all.jar
+```
+
+### Load into Burp Suite
+
+1. Launch Burp Suite.
+2. Go to **Extensions → Add**.
+3. Set **Extension Type** to `Java`.
+4. Select `build/libs/burp-mcp-all.jar` and click **Next**.
+5. Open the new **MCP** tab and tick **Enabled**.
+   - Optional: enable *tools that can edit your config* if you trust the client.
+   - Default listener: `http://127.0.0.1:9876`.
+
+### Wire up your MCP client
+
+**Claude Desktop (auto):** in the Burp MCP tab, click the installer button —
+it writes the config for you. Restart Claude Desktop.
+
+**Claude Desktop (manual):** edit
+`~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or
+`%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "burp": {
+      "command": "/path/to/burp/jre/bin/java",
+      "args": [
+        "-jar",
+        "/path/to/mcp-proxy-all.jar",
+        "--sse-url",
+        "http://127.0.0.1:9876"
+      ]
+    }
+  }
+}
+```
+
+Use the Burp MCP tab's installer to extract `mcp-proxy-all.jar` if you
+don't already have it.
+
+**SSE-capable clients (Cursor, Claude Code, custom):** point them straight
+at the SSE endpoint — no proxy needed:
+
+```text
+http://127.0.0.1:9876/sse
+```
+
+### Smoke test
+
+With Burp running, the extension loaded, and your client restarted, ask:
+
+```text
+Use the burp MCP to list the last 10 requests in the proxy history,
+then pick anything that looks like an authenticated API call.
+```
+
+If the client returns live traffic from your Burp session, you're wired up.
 
 ---
 
