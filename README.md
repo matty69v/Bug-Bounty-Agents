@@ -1,17 +1,25 @@
-c<div align="center">
+<div align="center">
 
 # Bug-Bounty-Agents
 
 **A curated arsenal of specialized AI agent prompts for bug bounty hunting,
 penetration testing, and offensive security workflows.**
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-black?style=flat-square)](LICENSE)
-[![Agents](https://img.shields.io/badge/agents-43-black?style=flat-square)](AGENTS.md)
-[![Platform](https://img.shields.io/badge/platform-Claude%20%7C%20Copilot%20%7C%20Cursor%20%7C%20ChatGPT-black?style=flat-square)](#per-tool-setup)
-[![CI](https://img.shields.io/badge/CI-link--check%20%2B%20shellcheck-black?style=flat-square)](.github/workflows/lint.yml)
-[![Status](https://img.shields.io/badge/status-active-black?style=flat-square)](#)
+*Drop-in personas for Claude Code, Copilot Chat, Cursor, and any agent-capable LLM -
+no frameworks, no dependencies, just disciplined prompts.*
 
-[Quick Start](#quick-start) · [Catalog](#agent-catalog) · [Setup](#per-tool-setup) · [Workflows](#workflows) · [Examples](examples/) · [Contributing](CONTRIBUTING.md) · [Disclaimer](#disclaimer)
+<br />
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-black?style=for-the-badge)](LICENSE)
+[![Agents](https://img.shields.io/badge/agents-43-black?style=for-the-badge)](AGENTS.md)
+[![Platform](https://img.shields.io/badge/platform-Claude%20%C2%B7%20Copilot%20%C2%B7%20Cursor%20%C2%B7%20ChatGPT-black?style=for-the-badge)](#per-tool-setup)
+[![CI](https://img.shields.io/badge/CI-passing-black?style=for-the-badge)](.github/workflows/lint.yml)
+
+<sub>**43** agents&nbsp;&nbsp;·&nbsp;&nbsp;**6** engagement phases&nbsp;&nbsp;·&nbsp;&nbsp;**4** supported clients&nbsp;&nbsp;·&nbsp;&nbsp;**0** dependencies</sub>
+
+<br />
+
+[**Quick Start**](#quick-start)&nbsp;&nbsp;·&nbsp;&nbsp;[**Catalog**](#agent-catalog)&nbsp;&nbsp;·&nbsp;&nbsp;[**Setup**](#per-tool-setup)&nbsp;&nbsp;·&nbsp;&nbsp;[**Workflows**](#workflows)&nbsp;&nbsp;·&nbsp;&nbsp;[**Examples**](examples/)&nbsp;&nbsp;·&nbsp;&nbsp;[**Contributing**](CONTRIBUTING.md)&nbsp;&nbsp;·&nbsp;&nbsp;[**Disclaimer**](#disclaimer)
 
 </div>
 
@@ -20,7 +28,7 @@ penetration testing, and offensive security workflows.**
 ## Overview
 
 Each `.md` file in this repository defines a focused, production-ready agent
-persona — recon, web hunting, exploit chaining, reporting, and more — that
+persona - recon, web hunting, exploit chaining, reporting, and more - that
 you can drop into **Claude Code**, **GitHub Copilot Chat**, **Cursor**, or
 any agent-capable LLM client.
 
@@ -174,7 +182,7 @@ machine-readable index lives in [AGENTS.md](AGENTS.md).
 ### One-line installer
 
 ```bash
-./install.sh           # interactive — detects what you have
+./install.sh           # interactive - detects what you have
 ./install.sh --help    # see all options
 ```
 
@@ -183,7 +191,10 @@ copies agents to the correct directory for each, and renames files
 appropriately (e.g. `.chatmode.md` for Copilot). Use `--dry-run` to
 preview, `--uninstall` to remove.
 
-### Claude Code (manual)
+<details>
+<summary><b>Claude Code</b> - manual install</summary>
+
+<br />
 
 Claude Code reads agent definitions from `~/.claude/agents/` (global) or
 `.claude/agents/` (per-project).
@@ -201,7 +212,12 @@ mkdir -p .claude/agents && cp /path/to/Bug-Bounty-Agents/*.md .claude/agents/
 > use the web-hunter agent to audit https://target.example.com
 ```
 
-### GitHub Copilot Chat VS Code (manual)
+</details>
+
+<details>
+<summary><b>GitHub Copilot Chat</b> (VS Code) - manual install</summary>
+
+<br />
 
 Copilot Chat supports custom **chat modes** via `.chatmode.md` files.
 
@@ -219,7 +235,12 @@ done
 
 Reload VS Code, then select the mode from the Copilot Chat dropdown.
 
-### Cursor (manual)
+</details>
+
+<details>
+<summary><b>Cursor</b> - manual install</summary>
+
+<br />
 
 ```bash
 cd /your/project
@@ -229,14 +250,21 @@ cp /path/to/Bug-Bounty-Agents/*.md .cursor/rules/
 
 Each file becomes a selectable rule in Cursor's chat panel.
 
-### ChatGPT / Gemini / Generic
+</details>
+
+<details>
+<summary><b>ChatGPT / Gemini / Generic</b> - copy-paste</summary>
+
+<br />
 
 Open the agent file, copy its full contents, and paste into:
 
-- **ChatGPT** — Custom GPT → Instructions, or Project → Instructions
-- **Gemini** — Gem instructions
-- **Open WebUI / LM Studio** — System prompt field
-- **API clients** — `system` role message
+- **ChatGPT** - Custom GPT → Instructions, or Project → Instructions
+- **Gemini** - Gem instructions
+- **Open WebUI / LM Studio** - System prompt field
+- **API clients** - `system` role message
+
+</details>
 
 ---
 
@@ -263,20 +291,21 @@ Well-behaved agents will:
 
 Use `swarm-orchestrator` or `attack-planner` to coordinate a full engagement:
 
-```text
-  recon-advisor      ──▶  enumerate attack surface
-                              │
-                              ▼
-  web-hunter / api-security  ──▶  find vulnerabilities
-                              │
-                              ▼
-  exploit-chainer    ──▶  escalate impact
-                              │
-                              ▼
-  poc-validator      ──▶  confirm and stabilize
-                              │
-                              ▼
-  report-generator   ──▶  write the submission
+```mermaid
+flowchart LR
+    A[recon-advisor]:::phase --> B[web-hunter<br/>api-security]:::phase
+    B --> C[exploit-chainer]:::phase
+    C --> D[poc-validator]:::phase
+    D --> E[report-generator]:::phase
+
+    A -.- A1([enumerate attack surface]):::note
+    B -.- B1([find vulnerabilities]):::note
+    C -.- C1([escalate impact]):::note
+    D -.- D1([confirm &amp; stabilize]):::note
+    E -.- E1([write the submission]):::note
+
+    classDef phase fill:#0d1117,stroke:#30363d,color:#e6edf3,stroke-width:1px;
+    classDef note  fill:#00000000,stroke:#00000000,color:#8b949e;
 ```
 
 Layer `_scope-guard` on top of any agent to enforce hard scope boundaries
@@ -289,7 +318,7 @@ and `purple-team` side by side.
 
 End-to-end engagement walkthroughs (sanitized) live in [`examples/`](examples/):
 
-- [`web-bug-bounty.md`](examples/web-bug-bounty.md) — recon → web-hunter →
+- [`web-bug-bounty.md`](examples/web-bug-bounty.md) - recon → web-hunter →
   bizlogic → chain → validate → report, ending in a Critical-tier
   HackerOne submission.
 
@@ -298,7 +327,7 @@ End-to-end engagement walkthroughs (sanitized) live in [`examples/`](examples/):
 ## Burp Suite MCP Integration
 
 [PortSwigger's MCP Server](https://github.com/PortSwigger/mcp-server) lets
-your LLM client drive Burp Suite directly — issue requests through the
+your LLM client drive Burp Suite directly - issue requests through the
 proxy, query Repeater/Intruder, read site maps, and pivot off live traffic
 while an agent in this repo provides the methodology.
 
@@ -306,11 +335,16 @@ while an agent in this repo provides the methodology.
 > `bizlogic-hunter` alongside the Burp MCP so the agent can both *think*
 > like a specialist and *act* through Burp.
 
+<details>
+<summary><b>Setup walkthrough</b> - prerequisites, build, load, wire-up, smoke test</summary>
+
+<br />
+
 ### Prerequisites
 
 - Burp Suite (Community or Professional) installed and running
 - Java available on `PATH` (`java --version`)
-- `jar` available on `PATH` (`jar --version`) — required to build
+- `jar` available on `PATH` (`jar --version`) - required to build
 - An MCP-capable client (Claude Desktop, Claude Code, Cursor, etc.)
 
 ### Build the extension
@@ -334,7 +368,7 @@ cd mcp-server
 
 ### Wire up your MCP client
 
-**Claude Desktop (auto):** in the Burp MCP tab, click the installer button —
+**Claude Desktop (auto):** in the Burp MCP tab, click the installer button -
 it writes the config for you. Restart Claude Desktop.
 
 **Claude Desktop (manual):** edit
@@ -361,7 +395,7 @@ Use the Burp MCP tab's installer to extract `mcp-proxy-all.jar` if you
 don't already have it.
 
 **SSE-capable clients (Cursor, Claude Code, custom):** point them straight
-at the SSE endpoint — no proxy needed:
+at the SSE endpoint - no proxy needed:
 
 ```text
 http://127.0.0.1:9876/sse
@@ -377,6 +411,8 @@ then pick anything that looks like an authenticated API call.
 ```
 
 If the client returns live traffic from your Burp session, you're wired up.
+
+</details>
 
 ---
 
@@ -424,7 +460,7 @@ and report privately via GitHub Security Advisories.
 
 ## Disclaimer
 
-> These agents are intended for **authorized security testing only** —
+> These agents are intended for **authorized security testing only** -
 > bug bounty programs you are enrolled in, systems you own, or environments
 > where you have explicit written permission to test.
 >
@@ -435,6 +471,12 @@ and report privately via GitHub Security Advisories.
 
 <div align="center">
 
-**Repository** · [github.com/matty69v/Bug-Bounty-Agents](https://github.com/matty69v/Bug-Bounty-Agents)
+<sub>Built for hunters who prefer disciplined prompts over brittle frameworks.</sub>
+
+<br />
+
+[**Star on GitHub**](https://github.com/matty69v/Bug-Bounty-Agents)&nbsp;&nbsp;·&nbsp;&nbsp;[**Report an issue**](https://github.com/matty69v/Bug-Bounty-Agents/issues)&nbsp;&nbsp;·&nbsp;&nbsp;[**Contribute**](CONTRIBUTING.md)
+
+<sub>MIT licensed&nbsp;·&nbsp;Authorized testing only</sub>
 
 </div>
